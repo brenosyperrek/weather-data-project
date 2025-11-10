@@ -1,0 +1,74 @@
+import psycopg2
+from api_request import mock_fetch_data
+
+def connect_to_db():
+    try:
+        conn = psycopg2.connect(
+            host="localhost",
+            port="5000",
+            dbname="db",
+            user="db_user",
+            password="db_password"
+        )
+        return conn
+    except psycopg2.Error as e:
+        print(f"Erro ao conectar ao banco de dados: {e}")
+        raise
+    
+def create_table(conn):
+    print("Criando tabela raw_weather_data se não existir...")
+    try:
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE SCHEMA IF NOT EXISTS dev;                     
+            CREATE TABLE IF NOT EXISTS dev.raw_weather_data (
+                id SERIAL PRIMARY KEY,
+                city TEXT,
+                temperature FLOAT,
+                weather_description TEXT,
+                wind_speed FLOAT,
+                time TIMESTAMP,
+                inserted_at TIMESTAMP DEFAULT NOW(),
+                utc_offset TEXT
+            );
+        """)
+        conn.commit()
+        print("Tabela raw_weather_data criada ou já existente.")
+    except psycopg2.Error as e:
+        print(f"Erro ao criar a tabela raw_weather_data: {e}")
+        raise
+
+def insert_records(conn, data):
+    print("Inserindo registros na tabela raw_weather_data...")
+    try:
+        weather = data['current']
+        location = data['location']
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO dev.raw_weather_data (
+                city, 
+                temperature, 
+                weather_description, 
+                wind_speed, 
+                time,
+                inserted_at, 
+                utc_offset)
+            VALUES (%s, %s, %s, %s, %s, NOW(), %s);
+        """, (
+            location['name'],
+            weather['temperature'],
+            weather['weather_descriptions'][0],
+            weather['wind_speed'],
+            location['localtime'],
+            location['utc_offset']
+        ))
+        conn.commit()
+        print("Registros inseridos com sucesso na tabela raw_weather_data.")
+    except psycopg2.Error as e:
+        print(f"Erro ao inserir registros na tabela raw_weather_data: {e}")
+        raise
+
+data = mock_fetch_data()
+conn = connect_to_db()
+create_table(conn)
+insert_records(conn, data)
