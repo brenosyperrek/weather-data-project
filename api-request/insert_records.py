@@ -68,7 +68,15 @@ def insert_records(conn, data):
         print(f"Erro ao inserir registros na tabela raw_weather_data: {e}")
         raise
 
-data = mock_fetch_data()
-conn = connect_to_db()
-create_table(conn)
-insert_records(conn, data)
+def main():
+    try:
+        data = mock_fetch_data()
+        conn = connect_to_db()
+        create_table(conn)
+        insert_records(conn, data)
+    except Exception as e:
+        print(f"Erro no processo principal: {e}")
+    finally:
+        if 'conn' in locals():
+            conn.close()
+            print("Conexão com o banco de dados fechada.")
