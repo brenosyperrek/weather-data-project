@@ -1,5 +1,5 @@
 import psycopg2
-from api_request import mock_fetch_data
+from api_request import fetch_weather_data
 
 def connect_to_db():
     try:
@@ -70,7 +70,7 @@ def insert_records(conn, data):
 
 def main():
     try:
-        data = mock_fetch_data()
+        data = fetch_weather_data()
         conn = connect_to_db()
         create_table(conn)
         insert_records(conn, data)
