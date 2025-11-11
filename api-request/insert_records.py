@@ -4,8 +4,8 @@ from api_request import mock_fetch_data
 def connect_to_db():
     try:
         conn = psycopg2.connect(
-            host="localhost",
-            port="5000",
+            host="db",
+            port="5432",
             dbname="db",
             user="db_user",
             password="db_password"
