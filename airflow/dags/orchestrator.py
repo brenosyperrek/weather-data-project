@@ -8,7 +8,7 @@ from docker.types import Mount
 sys.path.append('/opt/airflow/api-request')
 
 def safe_main_callable():
-    from insert_records import main
+    from insert_records_open_weather import main
     main()
 
 default_args = {
@@ -20,7 +20,7 @@ default_args = {
 dag = DAG(
     dag_id='weather_api_dbt_orchestrator',
     default_args=default_args,
-    schedule=timedelta(minutes=10)
+    schedule=timedelta(minutes=5)
 )
 
 with dag:

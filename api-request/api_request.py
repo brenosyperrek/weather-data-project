@@ -1,9 +1,8 @@
 import requests
 
-api_key = "9be2aac0d013bc5acf899f1f664d6bea"
-api_url = "https://api.weatherstack.com/current?access_key=9{api_key}&query=Florianopolis"
+api_url = "https://api.weatherstack.com/current?access_key=9be2aac0d013bc5acf899f1f664d6bea&query=Florianopolis"
 
-def fetch_weather_data():
+def fetch_data():
     print("Coletando dados meteorológicos de weatherstack.com")
     try:
         response = requests.get(api_url)
@@ -13,4 +12,3 @@ def fetch_weather_data():
     except requests.exceptions.RequestException as e:
         print(f"Erro ao fazer a requisição em weatherstack.com: {e}")
         raise
-    

@@ -1,5 +1,5 @@
 import psycopg2
-from api_request import fetch_weather_data
+from api_request import fetch_data
 
 def connect_to_db():
     try:
@@ -70,7 +70,7 @@ def insert_records(conn, data):
 
 def main():
     try:
-        data = fetch_weather_data()
+        data = fetch_data()
         conn = connect_to_db()
         create_table(conn)
         insert_records(conn, data)
@@ -80,3 +80,5 @@ def main():
         if 'conn' in locals():
             conn.close()
             print("Conexão com o banco de dados fechada.")
+            
+main()
