@@ -1,29 +1,15 @@
 import oracledb
 
-# Dados da conexão
-username = "SISFOSSA_ESR_SERVICE"
-password = "HR50$Mko1#"
-dsn = "10.9.9.181:1521/mat1prd"
+host = "oracle1.casan.com.br"          # DNS ou IP
+port = 1521                # ou a porta real
+service_name = "mat1prd"  # ex.: orclpdb1, meu_db.empresa.local
 
-# Conectar
-try:
-    print("Conectando ao banco de dados Oracle...")
-    connection = oracledb.connect(user=username, password=password, dsn=dsn)
-    print(connection)
-except oracledb.DatabaseError as e:
-    print(f"Erro ao conectar ao banco de dados Oracle: {e}")
-    raise
+# dsn = f"{host}:{port}/{service_name}"  # TCP
+# Para TCPS (TLS):
+dsn = f"tcps://{host}:{port}/?service_name={service_name}&ssl_server_dn_match=yes"
 
-# Criar cursor
-#cursor = connection.cursor()
-
-# Executar query
-#cursor.execute("SELECT * FROM employees")
-
-# Exibir resultados
-#for row in cursor:
-#    print(row)
-
-# Fechar
-#cursor.close()
-#connection.close()
+connection = oracledb.connect(
+    user="SISFOSSA_ESR_SERVICE",
+    password="HR50$Mko1#",
+    dsn=dsn
+)
